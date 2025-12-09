@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd" >
+
+    <bean id="deviceregistration.deviceRegistrationDAO" class="fr.paris.lutece.plugins.deviceregistration.business.deviceregistration.DeviceRegistrationDAO" />
+    <bean id="deviceregistration.deviceRegistrationHistoryDAO" class="fr.paris.lutece.plugins.deviceregistration.business.history.DeviceRegistrationHistoryDAO" />
+
+    <bean id="deviceregistration.deviceRegistrationRest" class="fr.paris.lutece.plugins.deviceregistration.rs.DeviceRegistrationRest" />
+
+    <bean id="deviceregistration.swaggerRest" class="fr.paris.lutece.plugins.deviceregistration.rs.SwaggerRest" />
+
+    <bean id="deviceregistration.uncaughtDeviceRegistrationExceptionMapper" class="fr.paris.lutece.plugins.deviceregistration.rs.error.UncaughtDeviceRegistrationExceptionMapper" />
+</beans>

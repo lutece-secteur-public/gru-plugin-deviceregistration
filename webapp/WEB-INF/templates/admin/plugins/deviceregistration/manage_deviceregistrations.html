@@ -1,0 +1,83 @@
+<#include "managedeviceregistration_tabs.html" />
+<@tabs tab="deviceregistration" />
+
+<@box>
+	<@boxHeader title='#i18n{deviceregistration.manage_deviceregistrations.title}' boxTools=true>
+		<@tform class='form-inline pull-right' name='manage_deviceregistration' action='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp'>
+			<@button type='submit' name='view_createDeviceRegistration' buttonIcon='plus' title='#i18n{deviceregistration.manage_deviceregistrations.buttonAdd}' />
+		</@tform>
+	</@boxHeader>
+	<@boxBody>    
+    <@messages infos=infos />
+    <@paginationAdmin paginator=paginator combo=1 />
+    <div class="clearfix"></div>
+    
+    <@offcanvas id='search_deviceregistration' title='Search' position='end' btnTitle='Search' btnIcon='search me-1'>
+    <@tform id='deviceregistration_search_form' name='deviceregistration_search_form' class='border-bottom pb-3' method='get' action='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp' >
+		<@messages errors=errors />
+    		
+	    			<@formGroup labelFor='filter_customer_id' labelKey='#i18n{deviceregistration.manage_deviceregistrations.columnCustomerId}'>
+				    		<@input type='text' id='filter_customer_id' name='filter_customer_id'  maxlength=50  placeHolder='#i18n{deviceregistration.manage_deviceregistrations.columnCustomerId}' value=mapFilterCriteria["customer_id"]!'' tabIndex='1' />
+				    </@formGroup>
+	    			<@formGroup labelFor='filter_connection_id' labelKey='#i18n{deviceregistration.manage_deviceregistrations.columnConnectionId}'>
+				    		<@input type='text' id='filter_connection_id' name='filter_connection_id'  maxlength=50  placeHolder='#i18n{deviceregistration.manage_deviceregistrations.columnConnectionId}' value=mapFilterCriteria["connection_id"]!'' tabIndex='2' />
+				    </@formGroup>
+	    			<@formGroup labelFor='filter_registration_token' labelKey='#i18n{deviceregistration.manage_deviceregistrations.columnRegistrationToken}'>
+				    		<@input type='text' id='filter_registration_token' name='filter_registration_token'  maxlength=255  placeHolder='#i18n{deviceregistration.manage_deviceregistrations.columnRegistrationToken}' value=mapFilterCriteria["registration_token"]!'' tabIndex='3' />
+				    </@formGroup>
+					<@formGroup labelFor='filter_token_issuer' labelKey='#i18n{deviceregistration.manage_deviceregistrations.columnTokenIssuer}'>
+						<@input type='text' id='filter_token_issuer' name='filter_token_issuer'  maxlength=50  placeHolder='#i18n{deviceregistration.manage_deviceregistrations.columnTokenIssuer}' value=mapFilterCriteria["token_issuer"]!'' tabIndex='4' />
+					</@formGroup>
+			
+		<@button type='submit' title='Search' buttonIcon='search'/>							
+    </@tform>
+    </@offcanvas>
+    
+
+    <#list mapFilterCriteria?keys as key> 
+    	<#if mapFilterCriteria[key]!="">
+	    	<span class="badge bg-primary px-2" > 
+	 			${key} <a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp?clean_filter=1<#list mapFilterCriteria?keys as x><#if "${x}"!="${key}">&filter_${x}=${mapFilterCriteria["${x}"]} </#if></#list>' class='icon-block'><i class='fas fa-times-circle' style="color:white" ></i></a>
+			</span>
+		</#if> 
+	</#list>
+
+	
+    <div class="clearfix"></div>
+    <@table>
+        <tr>
+        	<th>#i18n{deviceregistration.manage_deviceregistrations.columnCustomerId}&nbsp;<a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp?orderBy=customer_id'><i class='fas fa-sort'></i></a></th>
+            <th>#i18n{deviceregistration.manage_deviceregistrations.columnConnectionId}&nbsp;<a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp?orderBy=connection_id'><i class='fas fa-sort'></i></a></th>
+			<th>#i18n{deviceregistration.manage_deviceregistrations.columnRegistrationToken}&nbsp;<a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp?orderBy=registration_token'><i class='fas fa-sort'></i></a></th>
+			<th>#i18n{deviceregistration.manage_deviceregistrations.columnTokenIssuer}&nbsp;<a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp?orderBy=token_issuer'><i class='fas fa-sort'></i></a></th>
+            <th>#i18n{portal.util.labelActions}</th>
+        </tr>
+        <@tableHeadBodySeparator />
+        <#list deviceregistration_list as deviceregistration >
+        <tr>
+            <td>
+				${deviceregistration.customerId!''}
+			</td>
+            <td>
+				${deviceregistration.connectionId!''}
+			</td>
+            <td>
+				${deviceregistration.registrationToken!''}
+			</td>
+			<td>
+				${deviceregistration.tokenIssuer!''}
+			</td>
+        	<td>
+				<@aButton href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp?view=modifyDeviceRegistration&id=${deviceregistration.id}' title='#i18n{portal.util.labelModify}' hideTitle=['all'] buttonIcon='pencil' />
+						
+				<@aButton href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp?action=confirmRemoveDeviceRegistration&id=${deviceregistration.id}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' hideTitle=['all'] color='btn-danger'  />
+
+	        </td>
+        </tr>
+        </#list>
+    </@table>
+
+    <@paginationAdmin paginator=paginator />
+
+  </@boxBody>
+</@box>

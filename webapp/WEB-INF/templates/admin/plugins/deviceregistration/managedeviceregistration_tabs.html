@@ -1,0 +1,10 @@
+<#macro tabs tab >
+	<@tabList>
+				<@tabLink active=(tab=="deviceregistration")
+					title="#i18n{deviceregistration.manage_deviceregistrations.pageTitle}"
+			    	href="jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp" />
+				<@tabLink active=(tab=="deviceregistrationhistory")
+					title="#i18n{deviceregistration.manage_deviceregistrationshistory.pageTitle}"
+					href="jsp/admin/plugins/deviceregistration/ManageDeviceRegistrationsHistory.jsp" />
+	</@tabList>
+</#macro>

@@ -1,0 +1,90 @@
+<#include "managedeviceregistration_tabs.html" />
+<@tabs tab="deviceregistrationhistory" />
+
+<@box>
+	<@boxHeader title='#i18n{deviceregistration.manage_deviceregistrationshistory.title}' />
+	<@boxBody>    
+    <@messages infos=infos />
+    <@paginationAdmin paginator=paginator combo=1 />
+    <div class="clearfix"></div>
+    
+    <@offcanvas id='search_deviceregistration_history' title='Search' position='end' btnTitle='Search' btnIcon='search me-1'>
+    <@tform id='deviceregistration_history_search_form' name='deviceregistration_history_search_form' class='border-bottom pb-3' method='get' action='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrationsHistory.jsp' >
+		<@messages errors=errors />
+					<@formGroup labelFor='filter_change_type' labelKey='#i18n{deviceregistration.manage_deviceregistrationshistory.columnChangeType}'>
+						<select class="search-field form-select select-type"id="filter_change_type" name="filter_change_type" value=${mapFilterCriteria["change_type"]!''} tabIndex='1' >
+							<option value="">All</option>
+							<#list change_type_list as change_type>
+								<option value="${change_type}" <#if mapFilterCriteria["change_type"]! == change_type!> selected="selected"</#if> >${change_type}</option>
+							</#list>
+						</select>
+					</@formGroup>
+					<@formGroup labelFor='filter_created_at' labelKey='#i18n{deviceregistration.manage_deviceregistrationshistory.columnCreatedAt}'>
+						<@input type='date' id='filter_created_at' name='filter_created_at' placeHolder='#i18n{deviceregistration.manage_deviceregistrationshistory.columnCreatedAt}' value=mapFilterCriteria["created_at"]!'' tabIndex='2' />
+					</@formGroup>
+	    			<@formGroup labelFor='filter_customer_id' labelKey='#i18n{deviceregistration.manage_deviceregistrationshistory.columnCustomerId}'>
+				    		<@input type='text' id='filter_customer_id' name='filter_customer_id'  maxlength=50  placeHolder='#i18n{deviceregistration.manage_deviceregistrationshistory.columnCustomerId}' value=mapFilterCriteria["customer_id"]!'' tabIndex='3' />
+				    </@formGroup>
+	    			<@formGroup labelFor='filter_connection_id' labelKey='#i18n{deviceregistration.manage_deviceregistrationshistory.columnConnectionId}'>
+				    		<@input type='text' id='filter_connection_id' name='filter_connection_id'  maxlength=50  placeHolder='#i18n{deviceregistration.manage_deviceregistrationshistory.columnConnectionId}' value=mapFilterCriteria["connection_id"]!'' tabIndex='4' />
+				    </@formGroup>
+	    			<@formGroup labelFor='filter_registration_token' labelKey='#i18n{deviceregistration.manage_deviceregistrationshistory.columnRegistrationToken}'>
+				    		<@input type='text' id='filter_registration_token' name='filter_registration_token'  maxlength=255  placeHolder='#i18n{deviceregistration.manage_deviceregistrationshistory.columnRegistrationToken}' value=mapFilterCriteria["registration_token"]!'' tabIndex='5' />
+				    </@formGroup>
+					<@formGroup labelFor='filter_token_issuer' labelKey='#i18n{deviceregistration.manage_deviceregistrationshistory.columnTokenIssuer}'>
+						<@input type='text' id='filter_token_issuer' name='filter_token_issuer'  maxlength=50  placeHolder='#i18n{deviceregistration.manage_deviceregistrationshistory.columnTokenIssuer}' value=mapFilterCriteria["token_issuer"]!'' tabIndex='4' />
+					</@formGroup>
+
+		<@button type='submit' title='Search' buttonIcon='search'/>
+    </@tform>
+    </@offcanvas>
+    
+
+    <#list mapFilterCriteria?keys as key> 
+    	<#if mapFilterCriteria[key]!="">
+	    	<span class="badge bg-primary px-2" > 
+	 			${key} <a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrationsHistory.jsp?clean_filter=1<#list mapFilterCriteria?keys as x><#if "${x}"!="${key}">&filter_${x}=${mapFilterCriteria["${x}"]} </#if></#list>' class='icon-block'><i class='fas fa-times-circle' style="color:white" ></i></a>
+			</span>
+		</#if> 
+	</#list>
+
+	
+    <div class="clearfix"></div>
+    <@table>
+        <tr>
+			<th>#i18n{deviceregistration.manage_deviceregistrationshistory.columnChangeType}&nbsp;<a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrationsHistory.jsp?orderBy=change_type'><i class='fas fa-sort'></i></a></th>
+			<th>#i18n{deviceregistration.manage_deviceregistrationshistory.columnCreatedAt}&nbsp;<a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrationsHistory.jsp?orderBy=created_at'><i class='fas fa-sort'></i></a></th>
+			<th>#i18n{deviceregistration.manage_deviceregistrationshistory.columnCustomerId}&nbsp;<a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrationsHistory.jsp?orderBy=customer_id'><i class='fas fa-sort'></i></a></th>
+			<th>#i18n{deviceregistration.manage_deviceregistrationshistory.columnConnectionId}&nbsp;<a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrationsHistory.jsp?orderBy=connection_id'><i class='fas fa-sort'></i></a></th>
+			<th>#i18n{deviceregistration.manage_deviceregistrationshistory.columnRegistrationToken}&nbsp;<a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrationsHistory.jsp?orderBy=registration_token'><i class='fas fa-sort'></i></a></th>
+			<th>#i18n{deviceregistration.manage_deviceregistrationshistory.columnTokenIssuer}&nbsp;<a href='jsp/admin/plugins/deviceregistration/ManageDeviceRegistrationsHistory.jsp?orderBy=token_issuer'><i class='fas fa-sort'></i></a></th>
+        </tr>
+        <@tableHeadBodySeparator />
+        <#list deviceregistrationhistory_list as deviceregistrationhistory >
+        <tr>
+			<td>
+				${deviceregistrationhistory.changeType!''}
+			</td>
+			<td>
+				${deviceregistrationhistory.createdAt!''}
+			</td>
+			<td>
+				${deviceregistrationhistory.customerId!''}
+			</td>
+            <td>
+				${deviceregistrationhistory.connectionId!''}
+			</td>
+			<td>
+				${deviceregistrationhistory.registrationToken!''}
+			</td>
+			<td>
+				${deviceregistrationhistory.tokenIssuer!''}
+			</td>
+        </tr>
+        </#list>
+    </@table>
+
+    <@paginationAdmin paginator=paginator />
+
+  </@boxBody>
+</@box>

@@ -1,0 +1,172 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This API can be used to manage deviceRegistration",
+    "version" : "V1",
+    "title" : "DeviceRegistration API"
+  },
+  "host" : "localhost:8080/lutece",
+  "tags" : [ {
+    "name" : "restdeviceregistrationv1"
+  } ],
+  "paths" : {
+    "/rest/deviceregistration/v1" : {
+      "get" : {
+        "tags" : [ "restdeviceregistrationv1" ],
+        "summary" : "Get all registration token by identity (GUID/CUID) ",
+        "description" : "",
+        "operationId" : "getRegistrationToken",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "allowEmptyValue" : true
+        }, {
+          "name" : "customerId",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "allowEmptyValue" : true
+        }, {
+          "name" : "CLIENT_CODE",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Registration Token found",
+            "schema" : {
+              "$ref" : "#/definitions/DeviceRegistrationResponse"
+            }
+          },
+          "400" : {
+            "description" : "An error occurred during the treatment. with explanation message"
+          },
+          "404" : {
+            "description" : "Registration Token not found"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "restdeviceregistrationv1" ],
+        "summary" : "Create new device registration",
+        "description" : "",
+        "operationId" : "createDeviceRegistration",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Data of the deviceRegistration to create",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/DeviceRegistrationRequest"
+          }
+        }, {
+          "name" : "CLIENT_CODE",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Device registration created",
+            "schema" : {
+              "$ref" : "#/definitions/DeviceRegistrationResponse"
+            }
+          },
+          "400" : {
+            "description" : "An error occurred during the treatment. with explanation message"
+          },
+          "409" : {
+            "description" : "Token already exists"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "restdeviceregistrationv1" ],
+        "summary" : "Delete device registration",
+        "description" : "",
+        "operationId" : "deleteRegistrationToken",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Data of the deviceRegistration to delete",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/DeviceRegistrationRequest"
+          }
+        }, {
+          "name" : "CLIENT_CODE",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Device registration deleted"
+          },
+          "400" : {
+            "description" : "An error occurred during the treatment. with explanation message"
+          },
+          "404" : {
+            "description" : "Nothing was deleted"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "DeviceRegistrationRequest" : {
+      "type" : "object",
+      "properties" : {
+        "customerId" : {
+          "type" : "string",
+          "description" : "customerId",
+          "minLength" : 0,
+          "maxLength" : 50
+        },
+        "connectionId" : {
+          "type" : "string",
+          "description" : "connectionId",
+          "minLength" : 0,
+          "maxLength" : 50
+        },
+        "registrationToken" : {
+          "type" : "string",
+          "description" : "registrationToken",
+          "minLength" : 0,
+          "maxLength" : 255
+        },
+        "tokenIssuer" : {
+          "type" : "string",
+          "description" : "tokenIssuer",
+          "minLength" : 0,
+          "maxLength" : 50
+        }
+      }
+    },
+    "DeviceRegistrationResponse" : {
+      "type" : "object",
+      "properties" : {
+        "customerId" : {
+          "type" : "string"
+        },
+        "connectionId" : {
+          "type" : "string"
+        },
+        "registrationTokens" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
