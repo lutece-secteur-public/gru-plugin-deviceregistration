@@ -21,7 +21,7 @@ CREATE TABLE deviceregistration_deviceregistration_history
 (
     id_history int AUTO_INCREMENT,
     created_at TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    change_type ENUM('CREATED', 'DELETED') NOT NULL,
+    change_type varchar (50) NOT NULL,
     customer_id varchar(50),
     connection_id varchar(50),
     registration_token varchar(255) NOT NULL,
