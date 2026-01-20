@@ -98,9 +98,9 @@
                 <configuration>
                     <apiSources>
                         <apiSource>
-                            <host>localhost:8080/lutece</host>
                             <springmvc>false</springmvc>
                             <locations>fr.paris.lutece.plugins.deviceregistration.rs.DeviceRegistrationRest</locations>
+                            <basePath>$${context}</basePath>
                             <info>
                                 <title>DeviceRegistration API</title>
                                 <version>V1</version>

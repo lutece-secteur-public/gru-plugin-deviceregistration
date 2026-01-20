@@ -53,10 +53,6 @@ public class DeviceRegistrationRequest
     @NotEmpty( message = "#i18n{deviceregistration.validation.deviceregistration.RegistrationToken.notEmpty}" )
     @Size( max = 255, message = "#i18n{deviceregistration.validation.deviceregistration.RegistrationToken.size}" )
     private String registrationToken;
-    @ApiModelProperty( value = Constants.TOKEN_ISSUER )
-    @NotEmpty( message = "#i18n{deviceregistration.validation.deviceregistration.TokenIssuer.notEmpty}" )
-    @Size( max = 50, message = "#i18n{deviceregistration.validation.deviceregistration.TokenIssuer.size}" )
-    private String tokenIssuer;
 
     public DeviceRegistrationRequest( )
     {
@@ -64,15 +60,14 @@ public class DeviceRegistrationRequest
 
     public DeviceRegistrationRequest( String customerId, String connectionId )
     {
-        this( customerId, connectionId, null, null );
+        this( customerId, connectionId, null );
     }
 
-    public DeviceRegistrationRequest( String customerId, String connectionId, String registrationToken, String tokenIssuer )
+    public DeviceRegistrationRequest( String customerId, String connectionId, String registrationToken )
     {
         this.customerId = customerId;
         this.connectionId = connectionId;
         this.registrationToken = registrationToken;
-        this.tokenIssuer = tokenIssuer;
     }
 
     public String getCustomerId( )
@@ -88,15 +83,5 @@ public class DeviceRegistrationRequest
     public String getRegistrationToken( )
     {
         return this.registrationToken;
-    }
-
-    public String getTokenIssuer( )
-    {
-        return this.tokenIssuer;
-    }
-
-    public void setTokenIssuer( String tokenIssuer )
-    {
-        this.tokenIssuer = tokenIssuer;
     }
 }

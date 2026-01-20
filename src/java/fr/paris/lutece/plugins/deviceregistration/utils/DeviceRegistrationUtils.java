@@ -38,8 +38,15 @@ import fr.paris.lutece.plugins.deviceregistration.business.deviceregistration.De
 import fr.paris.lutece.plugins.deviceregistration.business.history.DeviceRegistrationHistory;
 import fr.paris.lutece.plugins.deviceregistration.dto.DeviceRegistrationRequest;
 import fr.paris.lutece.plugins.deviceregistration.dto.DeviceRegistrationResponse;
+import fr.paris.lutece.plugins.deviceregistration.exception.DeviceRegistrationException;
+import fr.paris.lutece.util.beanvalidation.BeanValidationUtil;
 
+import javax.validation.ConstraintViolation;
+import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DeviceRegistrationUtils
 {
@@ -54,23 +61,32 @@ public class DeviceRegistrationUtils
                 List.of( deviceRegistration.getRegistrationToken( ) ) );
     }
 
-    public static DeviceRegistration fromRequest( final DeviceRegistrationRequest request )
+    public static DeviceRegistration fromRequest( final DeviceRegistrationRequest request, final String tokenIssuer )
     {
         DeviceRegistration deviceRegistration = new DeviceRegistration( );
         deviceRegistration.setCustomerId( request.getCustomerId( ) );
         deviceRegistration.setConnectionId( request.getConnectionId( ) );
         deviceRegistration.setRegistrationToken( request.getRegistrationToken( ) );
-        deviceRegistration.setTokenIssuer( request.getTokenIssuer( ) );
+        deviceRegistration.setTokenIssuer( tokenIssuer );
         return deviceRegistration;
     }
 
-    public static DeviceRegistrationHistory toHistory( final DeviceRegistration deviceRegistration )
+    public static void validate( final DeviceRegistration deviceRegistration ) throws DeviceRegistrationException
     {
-        final DeviceRegistrationHistory deviceRegistrationHistory = new DeviceRegistrationHistory( );
-        deviceRegistrationHistory.setCustomerId( deviceRegistration.getCustomerId( ) );
-        deviceRegistrationHistory.setConnectionId( deviceRegistration.getConnectionId( ) );
-        deviceRegistrationHistory.setRegistrationToken( deviceRegistration.getRegistrationToken( ) );
-        deviceRegistrationHistory.setTokenIssuer( deviceRegistration.getTokenIssuer( ) );
-        return deviceRegistrationHistory;
+        if ( Objects.isNull( deviceRegistration.getCustomerId( ) ) && Objects.isNull( deviceRegistration.getConnectionId( ) ) )
+        {
+            throw new DeviceRegistrationException( "Problem with parameters for creating an entry in Database" );
+        }
+        Set<ConstraintViolation<DeviceRegistration>> violations = BeanValidationUtil.validate( deviceRegistration );
+        if ( !violations.isEmpty( ) )
+        {
+            List<String> reasons = violations.stream( ).map( ConstraintViolation::getMessage ).filter( Objects::nonNull ).collect( Collectors.toList( ) );
+            throw new DeviceRegistrationException( Response.Status.BAD_REQUEST, reasons );
+        }
+        if ( DeviceRegistrationHome.loadByRegistrationToken( deviceRegistration.getRegistrationToken( ) ).isPresent( ) )
+        {
+            throw new DeviceRegistrationException( Response.Status.CONFLICT, "Token already exist" );
+        }
     }
+
 }

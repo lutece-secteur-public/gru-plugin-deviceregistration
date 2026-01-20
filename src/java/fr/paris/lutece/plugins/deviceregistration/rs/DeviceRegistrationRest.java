@@ -89,10 +89,7 @@ public class DeviceRegistrationRest
             @ApiParam( value = "Data of the deviceRegistration to create", required = true, type = "DeviceRegistrationRequest" ) DeviceRegistrationRequest request,
             @ApiParam( required = true ) @HeaderParam( Constants.CLIENT_CODE ) String clientCode ) throws DeviceRegistrationException
     {
-
-        request.setTokenIssuer( clientCode );
-
-        DeviceRegistrationResponse response = DeviceRegistrationService.getInstance( ).createDeviceRegistration( request );
+        DeviceRegistrationResponse response = DeviceRegistrationService.getInstance( ).createDeviceRegistration( request, clientCode );
         return Response.status( Response.Status.CREATED ).entity( JsonUtil.buildJsonResponse( new JsonResponse( response ) ) ).build( );
     }
 
@@ -110,8 +107,7 @@ public class DeviceRegistrationRest
             @ApiParam( name = Constants.CLIENT_CODE, required = true ) @HeaderParam( Constants.CLIENT_CODE ) String clientCode )
             throws DeviceRegistrationException
     {
-        request.setTokenIssuer( clientCode );
-        DeviceRegistrationService.getInstance( ).deleteDeviceRegistration( request );
+        DeviceRegistrationService.getInstance( ).deleteDeviceRegistration( request, clientCode );
         return Response.status( Response.Status.NO_CONTENT ).build( );
     }
 }

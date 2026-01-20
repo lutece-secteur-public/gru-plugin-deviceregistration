@@ -5,7 +5,7 @@
     "version" : "V1",
     "title" : "DeviceRegistration API"
   },
-  "host" : "localhost:8080/lutece",
+  "basePath" : "${context}",
   "tags" : [ {
     "name" : "restdeviceregistrationv1"
   } ],
@@ -142,12 +142,6 @@
           "description" : "registrationToken",
           "minLength" : 0,
           "maxLength" : 255
-        },
-        "tokenIssuer" : {
-          "type" : "string",
-          "description" : "tokenIssuer",
-          "minLength" : 0,
-          "maxLength" : 50
         }
       }
     },

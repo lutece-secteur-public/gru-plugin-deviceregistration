@@ -45,7 +45,7 @@ public class DeviceRegistrationServiceTest extends LuteceTestCase
 {
     private static final String CUSTOMER_ID_TOO_LONG = "a".repeat( 51 );
     private static final String CONNECTION_ID_TOO_LONG = "b".repeat( 51 );
-    private static final String REGISTRATION_TOKEN_TOO_LONG = "c".repeat( 256);
+    private static final String REGISTRATION_TOKEN_TOO_LONG = "c".repeat( 256 );
 
     private static final String CUSTOMER_ID = "validCustomerId";
     private static final String CONNECTION_ID = "validConnectionId";
@@ -57,10 +57,10 @@ public class DeviceRegistrationServiceTest extends LuteceTestCase
 
     public void testCreateDeviceRegistrationWithoutIdentity( )
     {
-        DeviceRegistrationRequest request = new DeviceRegistrationRequest( null, null, "token", null );
+        DeviceRegistrationRequest request = new DeviceRegistrationRequest( null, null, "token" );
         try
         {
-            DeviceRegistrationService.getInstance( ).createDeviceRegistration( request );
+            DeviceRegistrationService.getInstance( ).createDeviceRegistration( request, null );
             fail( );
         }
         catch( DeviceRegistrationException e )
@@ -74,7 +74,7 @@ public class DeviceRegistrationServiceTest extends LuteceTestCase
 
         try
         {
-            DeviceRegistrationService.getInstance( ).createDeviceRegistration( initInvalidRequest( ) );
+            DeviceRegistrationService.getInstance( ).createDeviceRegistration( initInvalidRequest( ), INVALID_TOKEN_ISSUER );
             fail( );
         }
         catch( DeviceRegistrationException e )
@@ -103,7 +103,7 @@ public class DeviceRegistrationServiceTest extends LuteceTestCase
     {
         try
         {
-            DeviceRegistrationService.getInstance( ).deleteDeviceRegistration( new DeviceRegistrationRequest( ) );
+            DeviceRegistrationService.getInstance( ).deleteDeviceRegistration( new DeviceRegistrationRequest( ), null );
             fail( );
         }
         catch( DeviceRegistrationException e )
@@ -118,7 +118,7 @@ public class DeviceRegistrationServiceTest extends LuteceTestCase
         try
         {
             DeviceRegistrationService.getInstance( )
-                    .deleteDeviceRegistration( new DeviceRegistrationRequest( CUSTOMER_ID, CONNECTION_ID, REGISTRATION_TOKEN, INVALID_TOKEN_ISSUER ) );
+                    .deleteDeviceRegistration( new DeviceRegistrationRequest( CUSTOMER_ID, CONNECTION_ID, REGISTRATION_TOKEN ), INVALID_TOKEN_ISSUER );
             fail( );
         }
         catch( DeviceRegistrationException e )
@@ -133,7 +133,7 @@ public class DeviceRegistrationServiceTest extends LuteceTestCase
         // Creation with valid parameters
         try
         {
-            DeviceRegistrationResponse response = DeviceRegistrationService.getInstance( ).createDeviceRegistration( initValidRequest( ) );
+            DeviceRegistrationResponse response = DeviceRegistrationService.getInstance( ).createDeviceRegistration( initValidRequest( ), TOKEN_ISSUER);
             assertNotNull( response );
             assertEquals( CUSTOMER_ID, response.getCustomerId( ) );
             assertEquals( CONNECTION_ID, response.getConnectionId( ) );
@@ -146,7 +146,7 @@ public class DeviceRegistrationServiceTest extends LuteceTestCase
         // Creation with existing token (should fail)
         try
         {
-            DeviceRegistrationService.getInstance( ).createDeviceRegistration( initValidRequest( ) );
+            DeviceRegistrationService.getInstance( ).createDeviceRegistration( initValidRequest( ), TOKEN_ISSUER );
             fail( "CreateWithExistingToken" );
         }
         catch( DeviceRegistrationException e )
@@ -170,7 +170,7 @@ public class DeviceRegistrationServiceTest extends LuteceTestCase
         try
         {
             DeviceRegistrationService.getInstance( )
-                    .deleteDeviceRegistration( new DeviceRegistrationRequest( CUSTOMER_ID, CONNECTION_ID, REGISTRATION_TOKEN, TOKEN_ISSUER ) );
+                    .deleteDeviceRegistration( new DeviceRegistrationRequest( CUSTOMER_ID, CONNECTION_ID, REGISTRATION_TOKEN ), TOKEN_ISSUER );
         }
         catch( DeviceRegistrationException e )
         {
@@ -180,12 +180,12 @@ public class DeviceRegistrationServiceTest extends LuteceTestCase
 
     private DeviceRegistrationRequest initValidRequest( )
     {
-        return new DeviceRegistrationRequest( CUSTOMER_ID, CONNECTION_ID, REGISTRATION_TOKEN, TOKEN_ISSUER );
+        return new DeviceRegistrationRequest( CUSTOMER_ID, CONNECTION_ID, REGISTRATION_TOKEN );
     }
 
     private DeviceRegistrationRequest initInvalidRequest( )
     {
-        return new DeviceRegistrationRequest( CUSTOMER_ID_TOO_LONG, CONNECTION_ID_TOO_LONG, REGISTRATION_TOKEN_TOO_LONG, TOKEN_ISSUER );
+        return new DeviceRegistrationRequest( CUSTOMER_ID_TOO_LONG, CONNECTION_ID_TOO_LONG, REGISTRATION_TOKEN_TOO_LONG );
     }
 
 }
