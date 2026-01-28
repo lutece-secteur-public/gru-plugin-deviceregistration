@@ -72,9 +72,9 @@ public class DeviceRegistrationHistoryService
      * @param changeType
      *            type of change (CREATED, DELETED)
      */
-    public void createDeviceRegistrationHistory( DeviceRegistration deviceRegistration, ChangeType changeType )
+    public void createDeviceRegistrationHistory( final DeviceRegistration deviceRegistration, final ChangeType changeType )
     {
-        DeviceRegistrationHistory deviceRegistrationHistory = new DeviceRegistrationHistory( );
+        final DeviceRegistrationHistory deviceRegistrationHistory = new DeviceRegistrationHistory( );
         deviceRegistrationHistory.setCustomerId( deviceRegistration.getCustomerId( ) );
         deviceRegistrationHistory.setConnectionId( deviceRegistration.getConnectionId( ) );
         deviceRegistrationHistory.setRegistrationToken( deviceRegistration.getRegistrationToken( ) );

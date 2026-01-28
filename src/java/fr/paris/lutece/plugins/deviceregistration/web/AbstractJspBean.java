@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.deviceregistration.web;
 
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.AbstractPaginator;
@@ -43,6 +42,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -109,15 +109,8 @@ public abstract class AbstractJspBean<S, T> extends MVCAdminJspBean
 
     /**
      * Get Items from Ids list
-     * 
-     * @param <T>
      *
-     * @param <S>
-     *            the generic type of the Ids
-     * @param <T>
-     *            the generic type of the items
-     * @param <S>
-     * @param listIds
+     * @param listIds id list
      * @return the populated list of items corresponding to the id List
      */
     abstract List<T> getItemsFromIds( List<S> listIds );
@@ -138,18 +131,18 @@ public abstract class AbstractJspBean<S, T> extends MVCAdminJspBean
     /**
      * the name of the filter criteria sent in the request must start with "filter_"
      * 
-     * @param request
+     * @param request http request
      * @return mapFilterCriteria : contains all names/values filter criteria
      */
     protected Map<String, String> getFilterCriteriaFromRequest( HttpServletRequest request )
     {
 
-        Enumeration enumeration = request.getParameterNames( );
-        Map<String, String> mapFilterCriteria = new HashMap<>( );
+        final Enumeration<String> enumeration = request.getParameterNames( );
+        final Map<String, String> mapFilterCriteria = new HashMap<>( );
 
         while ( enumeration.hasMoreElements( ) )
         {
-            String strParameterName = (String) enumeration.nextElement( );
+            final String strParameterName = enumeration.nextElement( );
 
             // All parameters from search bar start with the same prefix "filter_"
             if ( strParameterName.startsWith( FILTER_ATTRIBUTES_PREFIX ) && !StringUtils.isBlank( request.getParameter( strParameterName ) ) )
@@ -181,7 +174,7 @@ public abstract class AbstractJspBean<S, T> extends MVCAdminJspBean
     protected String getSortMode( )
     {
 
-        _strSortMode = ( _strSortMode == SORT_ATTRIBUTES_ASC ) ? SORT_ATTRIBUTES_DESC : SORT_ATTRIBUTES_ASC;
+        _strSortMode = (Objects.equals(_strSortMode, SORT_ATTRIBUTES_ASC)) ? SORT_ATTRIBUTES_DESC : SORT_ATTRIBUTES_ASC;
 
         return _strSortMode;
 

@@ -36,10 +36,7 @@ package fr.paris.lutece.plugins.deviceregistration.service;
 import fr.paris.lutece.plugins.deviceregistration.business.deviceregistration.DeviceRegistration;
 import fr.paris.lutece.plugins.deviceregistration.business.deviceregistration.DeviceRegistrationHome;
 import fr.paris.lutece.plugins.deviceregistration.business.history.ChangeType;
-import fr.paris.lutece.plugins.deviceregistration.dto.DeviceRegistrationRequest;
-import fr.paris.lutece.plugins.deviceregistration.dto.DeviceRegistrationResponse;
 import fr.paris.lutece.plugins.deviceregistration.exception.DeviceRegistrationException;
-import fr.paris.lutece.plugins.deviceregistration.utils.DeviceRegistrationUtils;
 
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
@@ -66,25 +63,25 @@ public class DeviceRegistrationService
         return instance;
     }
 
-    public DeviceRegistrationResponse createDeviceRegistration( final DeviceRegistrationRequest request, final String tokenIssuer )
+    public DeviceRegistration createDeviceRegistration( final String customerId, final String connectionId, String registrationToken, final String tokenIssuer )
             throws DeviceRegistrationException
     {
 
-        DeviceRegistration deviceRegistration = DeviceRegistrationUtils.fromRequest( request, tokenIssuer );
-        DeviceRegistrationUtils.validate( deviceRegistration );
+        final DeviceRegistration deviceRegistration = new DeviceRegistration( customerId, connectionId, registrationToken, tokenIssuer );
+        DeviceRegistrationValidator.validate( deviceRegistration );
 
-        DeviceRegistration createdDeviceRegistration = DeviceRegistrationHome.create( deviceRegistration );
+        final DeviceRegistration createdDeviceRegistration = DeviceRegistrationHome.create( deviceRegistration );
 
         DeviceRegistrationHistoryService.getInstance( ).createDeviceRegistrationHistory( createdDeviceRegistration, ChangeType.CREATED );
 
-        return DeviceRegistrationUtils.toResponse( createdDeviceRegistration );
+        return createdDeviceRegistration;
 
     }
 
-    public void deleteDeviceRegistration( DeviceRegistrationRequest request, final String tokenIssuer ) throws DeviceRegistrationException
+    public void deleteDeviceRegistration( final String customerId, final String connectionId, String registrationToken, final String tokenIssuer ) throws DeviceRegistrationException
     {
 
-        if ( Objects.isNull( request.getCustomerId( ) ) && Objects.isNull( request.getConnectionId( ) ) && Objects.isNull( request.getRegistrationToken( ) ) )
+        if ( Objects.isNull( customerId ) && Objects.isNull( connectionId ) && Objects.isNull( registrationToken ) )
         {
             throw new DeviceRegistrationException( "Missing criteria for deleting entries" );
         }
@@ -94,8 +91,8 @@ public class DeviceRegistrationService
             throw new DeviceRegistrationException( "Missing token issuer concerned by operation" );
         }
 
-        final Map<String, String> criterias = prepareCriteria( request, tokenIssuer );
-        List<DeviceRegistration> deviceRegistrations = DeviceRegistrationHome.findListByCriteria( criterias );
+        final Map<String, String> criterias = this.prepareCriteria( customerId, connectionId, registrationToken, tokenIssuer );
+        final List<DeviceRegistration> deviceRegistrations = DeviceRegistrationHome.findListByCriteria( criterias );
 
         if ( deviceRegistrations.isEmpty( ) )
         {
@@ -110,7 +107,6 @@ public class DeviceRegistrationService
     public List<String> getRegistrationTokensByCriteria( final String customerId, final String connectionId, final String tokenIssuer )
             throws DeviceRegistrationException
     {
-
         if ( Objects.isNull( customerId ) && Objects.isNull( connectionId ) )
         {
             throw new DeviceRegistrationException( "Missing criteria for retrieving Registration Token" );
@@ -121,8 +117,7 @@ public class DeviceRegistrationService
             throw new DeviceRegistrationException( "Missing client code is request" );
         }
 
-        final DeviceRegistrationRequest request = new DeviceRegistrationRequest( customerId, connectionId, null );
-        List<String> registrationTokens = DeviceRegistrationHome.findListByCriteria( prepareCriteria( request, tokenIssuer ) ).stream( )
+        final List<String> registrationTokens = DeviceRegistrationHome.findListByCriteria( this.prepareCriteria( customerId, connectionId, null, tokenIssuer ) ).stream( )
                 .map( DeviceRegistration::getRegistrationToken ).collect( Collectors.toList( ) );
 
         if ( registrationTokens.isEmpty( ) )
@@ -133,28 +128,25 @@ public class DeviceRegistrationService
         return registrationTokens;
     }
 
-    private Map<String, String> prepareCriteria( DeviceRegistrationRequest request, String tokenIssuer )
+    private Map<String, String> prepareCriteria( final String customerId, final String connectionId, String registrationToken, String tokenIssuer )
     {
-        Map<String, String> criteria = new HashMap<>( );
+        final Map<String, String> criteria = new HashMap<>( );
 
-        if ( request != null )
+        if ( connectionId != null )
         {
-            if ( request.getConnectionId( ) != null )
-            {
-                criteria.put( "connection_id", request.getConnectionId( ) );
-            }
-            if ( request.getCustomerId( ) != null )
-            {
-                criteria.put( "customer_id", request.getCustomerId( ) );
-            }
-            if ( request.getRegistrationToken( ) != null )
-            {
-                criteria.put( "registration_token", request.getRegistrationToken( ) );
-            }
-            if ( tokenIssuer != null )
-            {
-                criteria.put( "token_issuer", tokenIssuer );
-            }
+            criteria.put( "connection_id", connectionId );
+        }
+        if ( customerId != null )
+        {
+            criteria.put( "customer_id", customerId );
+        }
+        if ( registrationToken != null )
+        {
+            criteria.put( "registration_token", registrationToken );
+        }
+        if ( tokenIssuer != null )
+        {
+            criteria.put( "token_issuer", tokenIssuer );
         }
 
         return criteria;

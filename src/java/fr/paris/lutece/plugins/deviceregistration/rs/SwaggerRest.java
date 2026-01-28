@@ -82,7 +82,7 @@ public class SwaggerRest
     @Produces( MediaType.APPLICATION_JSON )
     public Response getSwagger( @Context HttpServletRequest request, @PathParam( Constants.VERSION ) String strVersion ) throws IOException
     {
-        File fileJson = new File( getJsonFilePath( strVersion ) );
+        final File fileJson = new File( getJsonFilePath( strVersion ) );
         if ( fileJson.exists( ) )
         {
             Map<String, String> mapBaseInfos = getBaseInfos( AppPathService.getBaseUrl( request ), strVersion );

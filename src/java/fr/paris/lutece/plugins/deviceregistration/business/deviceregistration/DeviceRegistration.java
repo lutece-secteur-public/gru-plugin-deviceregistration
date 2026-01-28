@@ -61,6 +61,18 @@ public class DeviceRegistration implements Serializable
     @Size( max = 50, message = "#i18n{deviceregistration.validation.deviceregistration.TokenIssuer.size}" )
     private String _strTokenIssuer;
 
+    public DeviceRegistration()
+    {
+
+    }
+
+    public DeviceRegistration(String customerId, String connectionId, String registrationToken, String tokenIssuer) {
+        this._strCustomerId = customerId;
+        this._strConnectionId = connectionId;
+        this._strRegistrationToken = registrationToken;
+        this._strTokenIssuer = tokenIssuer;
+    }
+
     /**
      * Returns the Id
      *

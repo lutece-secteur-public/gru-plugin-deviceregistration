@@ -33,13 +33,19 @@
  */
 package fr.paris.lutece.plugins.deviceregistration.dto;
 
+import fr.paris.lutece.plugins.deviceregistration.rs.Constants;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ErrorResponse
 {
+    @ApiModelProperty( value = Constants.STATUS )
     private final Response.Status status;
+
+    @ApiModelProperty( value = Constants.MESSAGES )
     private final List<String> messages;
 
     public ErrorResponse( Response.Status status )

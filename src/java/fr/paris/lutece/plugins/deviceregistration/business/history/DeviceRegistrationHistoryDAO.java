@@ -76,19 +76,19 @@ public final class DeviceRegistrationHistoryDAO extends AbstractFilterDao implem
     }
 
     @Override
-    public List<Integer> selectIdDeviceRegistrationsHistoryList( Plugin plugin, Map<String, String> mapFilterCriteria, String strColumnToOrder,
-            String strSortMode )
+    public List<Integer> selectIdDeviceRegistrationsHistoryList( final Plugin plugin, final Map<String, String> mapFilterCriteria, final String strColumnToOrder,
+                                                                 final String strSortMode )
     {
-        List<Integer> deviceRegistrationHistoryList = new ArrayList<>( );
+        final List<Integer> deviceRegistrationHistoryList = new ArrayList<>( );
 
-        String strSelectStatement = prepareSelectStatement( SQL_QUERY_SELECTALL_ID, mapFilterCriteria, strColumnToOrder, strSortMode );
+        final String strSelectStatement = prepareSelectStatement( SQL_QUERY_SELECTALL_ID, mapFilterCriteria, strColumnToOrder, strSortMode );
 
-        try ( DAOUtil daoUtil = new DAOUtil( strSelectStatement, plugin ) )
+        try ( final DAOUtil daoUtil = new DAOUtil( strSelectStatement, plugin ) )
         {
 
             int nIndex = 1;
 
-            for ( Map.Entry<String, String> filter : mapFilterCriteria.entrySet( ) )
+            for ( final Map.Entry<String, String> filter : mapFilterCriteria.entrySet( ) )
             {
 
                 if ( StringUtils.isNotBlank( filter.getValue( ) ) && _mapSql.containsKey( filter.getKey( ) ) )
@@ -96,8 +96,8 @@ public final class DeviceRegistrationHistoryDAO extends AbstractFilterDao implem
                     daoUtil.setString( nIndex++, filter.getValue( ) );
                     if ( "created_at".equals( filter.getKey( ) ) )
                     {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" );
-                        LocalDateTime dateTime = LocalDateTime.parse( filter.getValue( ), formatter );
+                        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" );
+                        final LocalDateTime dateTime = LocalDateTime.parse( filter.getValue( ), formatter );
                         daoUtil.setString( nIndex++, dateTime.plusDays( 1 ).format( formatter ) );
                     }
                 }
@@ -115,19 +115,19 @@ public final class DeviceRegistrationHistoryDAO extends AbstractFilterDao implem
     }
 
     @Override
-    public List<DeviceRegistrationHistory> getDeviceRegistrationsHistoryListByIds( Plugin plugin, List<Integer> listIds )
+    public List<DeviceRegistrationHistory> getDeviceRegistrationsHistoryListByIds( final Plugin plugin, final List<Integer> listIds )
     {
-        List<DeviceRegistrationHistory> deviceRegistrationList = new ArrayList<>( );
+        final List<DeviceRegistrationHistory> deviceRegistrationList = new ArrayList<>( );
 
-        StringBuilder builder = new StringBuilder( );
+        final StringBuilder builder = new StringBuilder( );
 
         if ( !listIds.isEmpty( ) )
         {
             builder.append( "?,".repeat( listIds.size( ) ) ).deleteCharAt( builder.length( ) - 1 );
 
-            String stmt = SQL_QUERY_SELECTALL_BY_IDS + builder.toString( ) + ")";
+            final String stmt = SQL_QUERY_SELECTALL_BY_IDS + builder + ")";
 
-            try ( DAOUtil daoUtil = new DAOUtil( stmt, plugin ) )
+            try ( final DAOUtil daoUtil = new DAOUtil( stmt, plugin ) )
             {
                 int index = 1;
                 for ( Integer n : listIds )
@@ -138,7 +138,7 @@ public final class DeviceRegistrationHistoryDAO extends AbstractFilterDao implem
                 daoUtil.executeQuery( );
                 while ( daoUtil.next( ) )
                 {
-                    deviceRegistrationList.add( loadFromDaoUtil( daoUtil ) );
+                    deviceRegistrationList.add( this.loadFromDaoUtil( daoUtil ) );
                 }
             }
         }
@@ -147,7 +147,7 @@ public final class DeviceRegistrationHistoryDAO extends AbstractFilterDao implem
 
     private DeviceRegistrationHistory loadFromDaoUtil( final DAOUtil daoUtil )
     {
-        DeviceRegistrationHistory deviceRegistrationHistory = new DeviceRegistrationHistory( );
+        final DeviceRegistrationHistory deviceRegistrationHistory = new DeviceRegistrationHistory( );
         int index = 1;
         deviceRegistrationHistory.setId( daoUtil.getInt( index++ ) );
         deviceRegistrationHistory.setChangeType( ChangeType.valueOf( daoUtil.getString( index++ ) ) );

@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.deviceregistration.rs;
 
+import fr.paris.lutece.plugins.deviceregistration.business.deviceregistration.DeviceRegistration;
 import fr.paris.lutece.plugins.deviceregistration.dto.DeviceRegistrationRequest;
 import fr.paris.lutece.plugins.deviceregistration.dto.DeviceRegistrationResponse;
 import fr.paris.lutece.plugins.deviceregistration.exception.DeviceRegistrationException;
@@ -41,9 +42,20 @@ import fr.paris.lutece.plugins.rest.service.RestConstants;
 import fr.paris.lutece.plugins.rest.service.mapper.GenericUncaughtExceptionMapper;
 import fr.paris.lutece.util.json.JsonResponse;
 import fr.paris.lutece.util.json.JsonUtil;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -89,7 +101,8 @@ public class DeviceRegistrationRest
             @ApiParam( value = "Data of the deviceRegistration to create", required = true, type = "DeviceRegistrationRequest" ) DeviceRegistrationRequest request,
             @ApiParam( required = true ) @HeaderParam( Constants.CLIENT_CODE ) String clientCode ) throws DeviceRegistrationException
     {
-        DeviceRegistrationResponse response = DeviceRegistrationService.getInstance( ).createDeviceRegistration( request, clientCode );
+        final DeviceRegistration deviceRegistration = DeviceRegistrationService.getInstance().createDeviceRegistration(request.getCustomerId(), request.getConnectionId(), request.getRegistrationToken(), clientCode);
+        final DeviceRegistrationResponse response = new DeviceRegistrationResponse( deviceRegistration.getCustomerId( ), deviceRegistration.getConnectionId( ), List.of( deviceRegistration.getRegistrationToken( ) ) );
         return Response.status( Response.Status.CREATED ).entity( JsonUtil.buildJsonResponse( new JsonResponse( response ) ) ).build( );
     }
 
@@ -107,7 +120,7 @@ public class DeviceRegistrationRest
             @ApiParam( name = Constants.CLIENT_CODE, required = true ) @HeaderParam( Constants.CLIENT_CODE ) String clientCode )
             throws DeviceRegistrationException
     {
-        DeviceRegistrationService.getInstance( ).deleteDeviceRegistration( request, clientCode );
+        DeviceRegistrationService.getInstance( ).deleteDeviceRegistration( request.getCustomerId(), request.getConnectionId(), request.getRegistrationToken(), clientCode );
         return Response.status( Response.Status.NO_CONTENT ).build( );
     }
 }

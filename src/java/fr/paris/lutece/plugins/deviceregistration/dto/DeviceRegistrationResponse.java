@@ -33,12 +33,20 @@
  */
 package fr.paris.lutece.plugins.deviceregistration.dto;
 
+import fr.paris.lutece.plugins.deviceregistration.rs.Constants;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.List;
 
 public class DeviceRegistrationResponse
 {
+    @ApiModelProperty( value = Constants.CUSTOMER_ID )
     private final String customerId;
+
+    @ApiModelProperty( value = Constants.CONNECTION_ID )
     private final String connectionId;
+
+    @ApiModelProperty( value = Constants.REGISTRATION_TOKEN )
     private final List<String> registrationTokens;
 
     public DeviceRegistrationResponse( String customerId, String connectionId, List<String> registrationTokens )

@@ -46,10 +46,12 @@ public class DeviceRegistrationRequest
     @ApiModelProperty( value = Constants.CUSTOMER_ID )
     @Size( max = 50, message = "#i18n{deviceregistration.validation.deviceregistration.CustomerId.size}" )
     private String customerId;
+
     @ApiModelProperty( value = Constants.CONNECTION_ID )
     @Size( max = 50, message = "#i18n{deviceregistration.validation.deviceregistration.ConnectionId.size}" )
     private String connectionId;
-    @ApiModelProperty( value = Constants.REGISTRATION_TOKEN )
+
+    @ApiModelProperty( value = Constants.REGISTRATION_TOKENS )
     @NotEmpty( message = "#i18n{deviceregistration.validation.deviceregistration.RegistrationToken.notEmpty}" )
     @Size( max = 255, message = "#i18n{deviceregistration.validation.deviceregistration.RegistrationToken.size}" )
     private String registrationToken;
@@ -58,12 +60,7 @@ public class DeviceRegistrationRequest
     {
     }
 
-    public DeviceRegistrationRequest( String customerId, String connectionId )
-    {
-        this( customerId, connectionId, null );
-    }
-
-    public DeviceRegistrationRequest( String customerId, String connectionId, String registrationToken )
+    public DeviceRegistrationRequest( final String customerId, final String connectionId, final String registrationToken )
     {
         this.customerId = customerId;
         this.connectionId = connectionId;

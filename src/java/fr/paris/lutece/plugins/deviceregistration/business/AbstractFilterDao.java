@@ -87,11 +87,9 @@ public abstract class AbstractFilterDao
      * @return a string with the WHERE part and the ORDER BY part of the sql statement
      */
 
-    protected String prepareSelectStatement( String selectStatement, Map<String, String> mapFilterCriteria, String strColumnToOrder, String strSortMode )
+    protected String prepareSelectStatement( final String selectStatement, final Map<String, String> mapFilterCriteria, final String strColumnToOrder, final String strSortMode )
     {
-
         return selectStatement + addWhereClauses( mapFilterCriteria ) + addOrderByClause( strColumnToOrder, strSortMode );
-
     }
 
     /**
@@ -102,17 +100,17 @@ public abstract class AbstractFilterDao
      * @return the where part of the filterStatement
      */
 
-    protected String addWhereClauses( Map<String, String> mapFilterCriteria )
+    protected String addWhereClauses( final Map<String, String> mapFilterCriteria )
     {
 
-        StringBuilder whereClauses = new StringBuilder( );
+        final StringBuilder whereClauses = new StringBuilder( );
 
         if ( !mapFilterIsEmpty( mapFilterCriteria ) )
         {
 
             whereClauses.append( SQL_WHERE );
 
-            for ( Map.Entry<String, String> filter : mapFilterCriteria.entrySet( ) )
+            for ( final Map.Entry<String, String> filter : mapFilterCriteria.entrySet( ) )
             {
                 /*
                  * Check if a value was passed for the search and Check if the criteria name match with a BDD column name and if the type of this column is
@@ -143,10 +141,10 @@ public abstract class AbstractFilterDao
      * @return the orderBy part of the filterStatement
      */
 
-    protected String addOrderByClause( String strColumnToOrder, String strSortMode )
+    protected String addOrderByClause( final String strColumnToOrder, final String strSortMode )
     {
 
-        StringBuilder orderByClauses = new StringBuilder( );
+        final StringBuilder orderByClauses = new StringBuilder( );
 
         if ( StringUtils.isNotBlank( strColumnToOrder ) && _mapSql.containsKey( strColumnToOrder ) )
         {
@@ -164,10 +162,10 @@ public abstract class AbstractFilterDao
      * @return boolean
      */
 
-    private boolean mapFilterIsEmpty( Map<String, String> mapFilterCriteria )
+    private boolean mapFilterIsEmpty( final Map<String, String> mapFilterCriteria )
     {
 
-        for ( Map.Entry<String, String> entry : mapFilterCriteria.entrySet( ) )
+        for ( final Map.Entry<String, String> entry : mapFilterCriteria.entrySet( ) )
         {
             if ( StringUtils.isNotBlank( entry.getValue( ) ) )
             {
@@ -186,7 +184,7 @@ public abstract class AbstractFilterDao
      * @return operator to use for the clause passed in argument
      */
 
-    private String addWhereClauseOperator( String strWhereClauseColumn )
+    private String addWhereClauseOperator( final String strWhereClauseColumn )
     {
 
         if ( _mapSql.containsKey( strWhereClauseColumn ) )
@@ -216,16 +214,16 @@ public abstract class AbstractFilterDao
      * 
      * @return the name of column in sql database
      */
-    private String getFormatedColumnName( String strAttributeName, String strPrefixToCut )
+    private String getFormatedColumnName( final String strAttributeName, final String strPrefixToCut )
     {
 
         // Remove prefix (get or is) and lowercase the first character
-        String strRemovePrefix = StringUtils.uncapitalize( strAttributeName.substring( strPrefixToCut.length( ) ) );
+        final String strRemovePrefix = StringUtils.uncapitalize( strAttributeName.substring( strPrefixToCut.length( ) ) );
 
-        StringBuilder builder = new StringBuilder( );
+        final StringBuilder builder = new StringBuilder( );
 
         // Change uppercase character to lowercase and add an underscore in front of it. exemple : dateStart -> date_start
-        for ( char c : strRemovePrefix.toCharArray( ) )
+        for ( final char c : strRemovePrefix.toCharArray( ) )
         {
 
             if ( Character.isUpperCase( c ) )
@@ -246,20 +244,20 @@ public abstract class AbstractFilterDao
     /**
      * Initialization of mapSql. mapSql Containing names and types of each databases column associated to a business class attribute.
      */
-    protected void initMapSql( Class<?> businessClass )
+    protected void initMapSql( final Class<?> businessClass )
     {
 
         _mapSql = new HashMap<>( );
 
-        for ( Method method : businessClass.getDeclaredMethods( ) )
+        for ( final Method method : businessClass.getDeclaredMethods( ) )
         {
 
-            for ( String prefix : _listPrefixToRemove )
+            for ( final String prefix : _listPrefixToRemove )
             {
                 // Use only getter and is function of business class to infer database name of each attributes
                 if ( method.getName( ).startsWith( prefix ) )
                 {
-                    _mapSql.put( getFormatedColumnName( method.getName( ), prefix ), method.getReturnType( ).getSimpleName( ) );
+                    _mapSql.put( this.getFormatedColumnName( method.getName( ), prefix ), method.getReturnType( ).getSimpleName( ) );
                 }
             }
         }

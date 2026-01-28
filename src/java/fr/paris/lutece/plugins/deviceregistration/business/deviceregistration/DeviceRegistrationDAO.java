@@ -67,17 +67,16 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
      */
     public DeviceRegistrationDAO( )
     {
-
-        initMapSql( DeviceRegistration.class ); // Maps with name and type of each databases column associated to the business class attributes
+        this.initMapSql( DeviceRegistration.class ); // Maps with name and type of each databases column associated to the business class attributes
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public void insert( DeviceRegistration deviceRegistration, Plugin plugin )
+    public void insert( final DeviceRegistration deviceRegistration, final Plugin plugin )
     {
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( final DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
             int nIndex = 1;
             daoUtil.setString( nIndex++, deviceRegistration.getCustomerId( ) );
@@ -94,9 +93,9 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
      * {@inheritDoc }
      */
     @Override
-    public Optional<DeviceRegistration> load( int nKey, Plugin plugin )
+    public Optional<DeviceRegistration> load( final int nKey, final Plugin plugin )
     {
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ID, plugin ) )
+        try ( final DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_ID, plugin ) )
         {
             daoUtil.setInt( 1, nKey );
             daoUtil.executeQuery( );
@@ -108,9 +107,9 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
      * {@inheritDoc }
      */
     @Override
-    public void delete( int nKey, Plugin plugin )
+    public void delete( final int nKey, final Plugin plugin )
     {
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        try ( final DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
         {
             daoUtil.setInt( 1, nKey );
             daoUtil.executeUpdate( );
@@ -118,9 +117,9 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
     }
 
     @Override
-    public Optional<DeviceRegistration> loadByRegistrationToken( String registrationToken, Plugin plugin )
+    public Optional<DeviceRegistration> loadByRegistrationToken( final String registrationToken, final Plugin plugin )
     {
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_BY_REGISTRATIONTOKEN, plugin ) )
+        try ( final DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_BY_REGISTRATIONTOKEN, plugin ) )
         {
             daoUtil.setString( 1, registrationToken );
             daoUtil.executeQuery( );
@@ -129,12 +128,12 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
         }
     }
 
-    private @NonNull Optional<DeviceRegistration> getDeviceRegistration( DAOUtil daoUtil )
+    private @NonNull Optional<DeviceRegistration> getDeviceRegistration( final DAOUtil daoUtil )
     {
         DeviceRegistration deviceRegistration = null;
         if ( daoUtil.next( ) )
         {
-            deviceRegistration = loadFromDaoUtil( daoUtil );
+            deviceRegistration = this.loadFromDaoUtil( daoUtil );
         }
 
         return Optional.ofNullable( deviceRegistration );
@@ -144,9 +143,9 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
      * {@inheritDoc }
      */
     @Override
-    public void store( DeviceRegistration deviceRegistration, Plugin plugin )
+    public void store( final DeviceRegistration deviceRegistration, final Plugin plugin )
     {
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( final DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
             int nIndex = 1;
 
@@ -164,16 +163,16 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
      * {@inheritDoc }
      */
     @Override
-    public List<DeviceRegistration> selectDeviceRegistrationsList( Plugin plugin )
+    public List<DeviceRegistration> selectDeviceRegistrationsList( final Plugin plugin )
     {
-        List<DeviceRegistration> deviceRegistrationList = new ArrayList<>( );
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        final List<DeviceRegistration> deviceRegistrationList = new ArrayList<>( );
+        try ( final DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
             daoUtil.executeQuery( );
 
             while ( daoUtil.next( ) )
             {
-                deviceRegistrationList.add( loadFromDaoUtil( daoUtil ) );
+                deviceRegistrationList.add( this.loadFromDaoUtil( daoUtil ) );
             }
 
             return deviceRegistrationList;
@@ -181,17 +180,17 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
     }
 
     @Override
-    public List<DeviceRegistration> findListByCriteria( Map<String, String> criteria, Plugin plugin )
+    public List<DeviceRegistration> findListByCriteria( final Map<String, String> criteria, final Plugin plugin )
     {
-        List<DeviceRegistration> deviceRegistrationList = new ArrayList<>( );
+        final List<DeviceRegistration> deviceRegistrationList = new ArrayList<>( );
 
-        String strSelectStatement = prepareSelectStatement( SQL_QUERY_SELECTALL, criteria, null, null );
+        final String strSelectStatement = prepareSelectStatement( SQL_QUERY_SELECTALL, criteria, null, null );
 
-        try ( DAOUtil daoUtil = new DAOUtil( strSelectStatement, plugin ) )
+        try ( final DAOUtil daoUtil = new DAOUtil( strSelectStatement, plugin ) )
         {
             int nIndex = 1;
 
-            for ( Map.Entry<String, String> filter : criteria.entrySet( ) )
+            for ( final Map.Entry<String, String> filter : criteria.entrySet( ) )
             {
 
                 if ( StringUtils.isNotBlank( filter.getValue( ) ) && _mapSql.containsKey( filter.getKey( ) ) )
@@ -204,7 +203,7 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
 
             while ( daoUtil.next( ) )
             {
-                deviceRegistrationList.add( loadFromDaoUtil( daoUtil ) );
+                deviceRegistrationList.add( this.loadFromDaoUtil( daoUtil ) );
             }
 
             return deviceRegistrationList;
@@ -215,18 +214,18 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
      * {@inheritDoc }
      */
     @Override
-    public List<Integer> selectIdDeviceRegistrationsList( Plugin plugin, Map<String, String> mapFilterCriteria, String strColumnToOrder, String strSortMode )
+    public List<Integer> selectIdDeviceRegistrationsList( final Plugin plugin, final Map<String, String> mapFilterCriteria, final String strColumnToOrder, final String strSortMode )
     {
-        List<Integer> deviceRegistrationList = new ArrayList<>( );
+        final List<Integer> deviceRegistrationList = new ArrayList<>( );
 
-        String strSelectStatement = prepareSelectStatement( SQL_QUERY_SELECTALL_ID, mapFilterCriteria, strColumnToOrder, strSortMode );
+        final String strSelectStatement = prepareSelectStatement( SQL_QUERY_SELECTALL_ID, mapFilterCriteria, strColumnToOrder, strSortMode );
 
-        try ( DAOUtil daoUtil = new DAOUtil( strSelectStatement, plugin ) )
+        try ( final DAOUtil daoUtil = new DAOUtil( strSelectStatement, plugin ) )
         {
 
             int nIndex = 1;
 
-            for ( Map.Entry<String, String> filter : mapFilterCriteria.entrySet( ) )
+            for ( final Map.Entry<String, String> filter : mapFilterCriteria.entrySet( ) )
             {
 
                 if ( StringUtils.isNotBlank( filter.getValue( ) ) && _mapSql.containsKey( filter.getKey( ) ) )
@@ -250,10 +249,10 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
      * {@inheritDoc }
      */
     @Override
-    public ReferenceList selectDeviceRegistrationsReferenceList( Plugin plugin )
+    public ReferenceList selectDeviceRegistrationsReferenceList( final Plugin plugin )
     {
-        ReferenceList deviceRegistrationList = new ReferenceList( );
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        final ReferenceList deviceRegistrationList = new ReferenceList( );
+        try ( final DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
             daoUtil.executeQuery( );
 
@@ -270,23 +269,19 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
      * {@inheritDoc }
      */
     @Override
-    public List<DeviceRegistration> selectDeviceRegistrationsListByIds( Plugin plugin, List<Integer> listIds )
+    public List<DeviceRegistration> selectDeviceRegistrationsListByIds( final Plugin plugin, final List<Integer> listIds )
     {
-        List<DeviceRegistration> deviceRegistrationList = new ArrayList<>( );
+        final List<DeviceRegistration> deviceRegistrationList = new ArrayList<>( );
 
-        StringBuilder builder = new StringBuilder( );
+        final StringBuilder builder = new StringBuilder( );
 
         if ( !listIds.isEmpty( ) )
         {
-            for ( int i = 0; i < listIds.size( ); i++ )
-            {
-                builder.append( "?," );
-            }
+            builder.append("?,".repeat(listIds.size()));
+            final String placeHolders = builder.deleteCharAt( builder.length( ) - 1 ).toString( );
+            final String stmt = SQL_QUERY_SELECTALL_BY_IDS + placeHolders + ")";
 
-            String placeHolders = builder.deleteCharAt( builder.length( ) - 1 ).toString( );
-            String stmt = SQL_QUERY_SELECTALL_BY_IDS + placeHolders + ")";
-
-            try ( DAOUtil daoUtil = new DAOUtil( stmt, plugin ) )
+            try ( final DAOUtil daoUtil = new DAOUtil( stmt, plugin ) )
             {
                 int index = 1;
                 for ( Integer n : listIds )
@@ -297,7 +292,7 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
                 daoUtil.executeQuery( );
                 while ( daoUtil.next( ) )
                 {
-                    deviceRegistrationList.add( loadFromDaoUtil( daoUtil ) );
+                    deviceRegistrationList.add( this.loadFromDaoUtil( daoUtil ) );
                 }
             }
         }
@@ -305,10 +300,10 @@ public final class DeviceRegistrationDAO extends AbstractFilterDao implements ID
 
     }
 
-    private DeviceRegistration loadFromDaoUtil( DAOUtil daoUtil )
+    private DeviceRegistration loadFromDaoUtil( final DAOUtil daoUtil )
     {
 
-        DeviceRegistration deviceRegistration = new DeviceRegistration( );
+        final DeviceRegistration deviceRegistration = new DeviceRegistration( );
         int nIndex = 1;
 
         deviceRegistration.setId( daoUtil.getInt( nIndex++ ) );

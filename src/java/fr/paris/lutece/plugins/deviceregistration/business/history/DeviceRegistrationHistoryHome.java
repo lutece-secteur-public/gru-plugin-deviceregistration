@@ -43,8 +43,8 @@ import java.util.Map;
 public final class DeviceRegistrationHistoryHome
 {
 
-    private static IDeviceRegistrationHistoryDAO dao = SpringContextService.getBean( "deviceregistration.deviceRegistrationHistoryDAO" );
-    private static Plugin plugin = PluginService.getPlugin( "deviceregistration" );
+    private static final IDeviceRegistrationHistoryDAO dao = SpringContextService.getBean( "deviceregistration.deviceRegistrationHistoryDAO" );
+    private static final Plugin plugin = PluginService.getPlugin( "deviceregistration" );
 
     /**
      * Private constructor to avoid instantiation
@@ -53,7 +53,7 @@ public final class DeviceRegistrationHistoryHome
     {
     }
 
-    public static List<Integer> getIdDeviceRegistrationsHistoryList( Map<String, String> mapFilterCriteria, String strColumnToOrder, String strSortMode )
+    public static List<Integer> getIdDeviceRegistrationsHistoryList( final Map<String, String> mapFilterCriteria, final String strColumnToOrder, final String strSortMode )
     {
         return dao.selectIdDeviceRegistrationsHistoryList( plugin, mapFilterCriteria, strColumnToOrder, strSortMode );
     }
@@ -69,7 +69,7 @@ public final class DeviceRegistrationHistoryHome
      * @param deviceRegistrationHistory
      *            The instance wich contains the informations to store
      */
-    public static void create( DeviceRegistrationHistory deviceRegistrationHistory )
+    public static void create( final DeviceRegistrationHistory deviceRegistrationHistory )
     {
         dao.insert( deviceRegistrationHistory, plugin );
     }

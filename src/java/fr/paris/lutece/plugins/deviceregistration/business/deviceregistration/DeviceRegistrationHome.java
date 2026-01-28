@@ -47,8 +47,8 @@ import java.util.Optional;
 public final class DeviceRegistrationHome
 {
     // Static variable pointed at the DAO instance
-    private static IDeviceRegistrationDAO _dao = SpringContextService.getBean( "deviceregistration.deviceRegistrationDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "deviceregistration" );
+    private static final IDeviceRegistrationDAO _dao = SpringContextService.getBean( "deviceregistration.deviceRegistrationDAO" );
+    private static final Plugin _plugin = PluginService.getPlugin( "deviceregistration" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -64,7 +64,7 @@ public final class DeviceRegistrationHome
      *            The instance of the DeviceRegistration which contains the informations to store
      * @return The instance of deviceRegistration which has been created with its primary key.
      */
-    public static DeviceRegistration create( DeviceRegistration deviceRegistration )
+    public static DeviceRegistration create( final DeviceRegistration deviceRegistration )
     {
         _dao.insert( deviceRegistration, _plugin );
 
@@ -78,7 +78,7 @@ public final class DeviceRegistrationHome
      *            token of the instance we're looking for
      * @return an Optional of the object
      */
-    public static Optional<DeviceRegistration> loadByRegistrationToken( String registrationToken )
+    public static Optional<DeviceRegistration> loadByRegistrationToken( final String registrationToken )
     {
         return _dao.loadByRegistrationToken( registrationToken, _plugin );
     }
@@ -90,7 +90,7 @@ public final class DeviceRegistrationHome
      *            The instance of the DeviceRegistration which contains the data to store
      * @return The instance of the deviceRegistration which has been updated
      */
-    public static DeviceRegistration update( DeviceRegistration deviceRegistration )
+    public static DeviceRegistration update( final DeviceRegistration deviceRegistration )
     {
         _dao.store( deviceRegistration, _plugin );
 
@@ -103,7 +103,7 @@ public final class DeviceRegistrationHome
      * @param nKey
      *            The deviceRegistration Id
      */
-    public static void remove( int nKey )
+    public static void remove( final int nKey )
     {
         _dao.delete( nKey, _plugin );
     }
@@ -115,7 +115,7 @@ public final class DeviceRegistrationHome
      *            The deviceRegistration primary key
      * @return an instance of DeviceRegistration
      */
-    public static Optional<DeviceRegistration> findByPrimaryKey( int nKey )
+    public static Optional<DeviceRegistration> findByPrimaryKey( final int nKey )
     {
         return _dao.load( nKey, _plugin );
     }
@@ -127,7 +127,7 @@ public final class DeviceRegistrationHome
      *            contains search inputs
      * @return list of DeviceRegistration
      */
-    public static List<DeviceRegistration> findListByCriteria( Map<String, String> criteria )
+    public static List<DeviceRegistration> findListByCriteria( final Map<String, String> criteria )
     {
         return _dao.findListByCriteria( criteria, _plugin );
     }
@@ -153,7 +153,7 @@ public final class DeviceRegistrationHome
      *            contains the sortMode in case of sorting request : ASC or DESC (must be null)
      * @return the list which contains the id of all the project objects
      */
-    public static List<Integer> getIdDeviceRegistrationsList( Map<String, String> mapFilterCriteria, String strColumnToOrder, String strSortMode )
+    public static List<Integer> getIdDeviceRegistrationsList( final Map<String, String> mapFilterCriteria, final String strColumnToOrder, final String strSortMode )
     {
         return _dao.selectIdDeviceRegistrationsList( _plugin, mapFilterCriteria, strColumnToOrder, strSortMode );
     }
@@ -165,7 +165,7 @@ public final class DeviceRegistrationHome
      *            liste of ids
      * @return the list which contains the data of all the avant objects
      */
-    public static List<DeviceRegistration> getDeviceRegistrationsListByIds( List<Integer> listIds )
+    public static List<DeviceRegistration> getDeviceRegistrationsListByIds( final List<Integer> listIds )
     {
         return _dao.selectDeviceRegistrationsListByIds( _plugin, listIds );
     }

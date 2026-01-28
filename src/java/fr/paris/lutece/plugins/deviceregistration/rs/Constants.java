@@ -64,6 +64,9 @@ public final class Constants
     public static final String CONNECTION_ID = "connectionId";
     public static final String CUSTOMER_ID = "customerId";
     public static final String REGISTRATION_TOKEN = "registrationToken";
+    public static final String REGISTRATION_TOKENS = "registrationTokens";
+    public static final String STATUS = "status";
+    public static final String MESSAGES = "messages";
     public static final String TOKEN_ISSUER = "tokenIssuer";
     public static final String CLIENT_CODE = "CLIENT_CODE";
 

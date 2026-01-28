@@ -139,7 +139,7 @@
         },
         "registrationToken" : {
           "type" : "string",
-          "description" : "registrationToken",
+          "description" : "registrationTokens",
           "minLength" : 0,
           "maxLength" : 255
         }
@@ -149,13 +149,16 @@
       "type" : "object",
       "properties" : {
         "customerId" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "customerId"
         },
         "connectionId" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "connectionId"
         },
         "registrationTokens" : {
           "type" : "array",
+          "description" : "registrationToken",
           "items" : {
             "type" : "string"
           }
