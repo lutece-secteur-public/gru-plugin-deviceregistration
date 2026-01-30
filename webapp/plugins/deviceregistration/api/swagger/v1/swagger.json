@@ -10,7 +10,7 @@
     "name" : "restdeviceregistrationv1"
   } ],
   "paths" : {
-    "/rest/deviceregistration/v1" : {
+    "/rest/deviceregistration/v1/token" : {
       "get" : {
         "tags" : [ "restdeviceregistrationv1" ],
         "summary" : "Get all registration token by identity (GUID/CUID) ",

@@ -69,6 +69,7 @@ public class DeviceRegistrationRest
 {
 
     @GET
+    @Path(Constants.TOKEN_PATH)
     @Produces( MediaType.APPLICATION_JSON )
     @ApiOperation( value = "Get all registration token by identity (GUID/CUID) " )
     @ApiResponses( value = {
@@ -89,6 +90,7 @@ public class DeviceRegistrationRest
     }
 
     @POST
+    @Path(Constants.TOKEN_PATH)
     @Consumes( MediaType.APPLICATION_JSON )
     @Produces( MediaType.APPLICATION_JSON )
     @ApiOperation( value = "Create new device registration" )
@@ -107,6 +109,7 @@ public class DeviceRegistrationRest
     }
 
     @DELETE
+    @Path(Constants.TOKEN_PATH)
     @Consumes( MediaType.APPLICATION_JSON )
     @Produces( MediaType.APPLICATION_JSON )
     @ApiOperation( value = "Delete device registration" )

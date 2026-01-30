@@ -39,6 +39,7 @@ package fr.paris.lutece.plugins.deviceregistration.rs;
 public final class Constants
 {
     public static final String API_PATH = "deviceregistration/api";
+    public static final String TOKEN_PATH = "token";
     public static final String VERSION_PATH = "/v{" + Constants.VERSION + "}";
     public static final String ID_PATH = "/{" + Constants.ID + "}";
     public static final String VERSION = "version";
