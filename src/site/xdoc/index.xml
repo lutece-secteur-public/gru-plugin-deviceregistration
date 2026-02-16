@@ -1,30 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
     <properties>
-        <title>Plugin deviceregistration</title>
+        <title>Plugin DeviceRegistration</title>
     </properties>
     <head>
-        <!-- Keywords example : "cms, authentication, cms, workflow, seo, collaborative, ..." 
-             Use the language of this xdoc -->
-        <meta name="keywords" content="" />
+        <meta name="keywords" content="notification, push, mobile, device, registration, token, gru"/>
     </head>
     <body>
-        <section name="Plugin deviceregistration">
-            <!--
-            <p>
-                <img src="images/deviceregistration.png" />
-            </p>
-            -->
+        <section name="Plugin DeviceRegistration">
             <subsection name="Introduction">
-                <p></p>
+                <p>
+                    The DeviceRegistration plugin provides management of mobile device registrations for push notification delivery. 
+                    It offers a complete solution for registering, querying, and deleting registration tokens associated with user 
+                    identities (GUID/CUID).
+                </p>
+                <p>
+                    This plugin exposes a secure REST API allowing mobile applications and external services to manage device registrations. 
+                    It also maintains a complete history of all operations (creations and deletions) for audit and traceability purposes.
+                </p>
+                <p>
+                    Key features include device registration creation with validation, retrieval of registration tokens by criteria 
+                    (customer_id, connection_id), registration deletion, and automatic historization of all operations.
+                </p>
             </subsection>
+            
             <subsection name="Configuration">
-                <p></p>
+                <p>
+                    <strong>Available Properties</strong>
+                </p>
+                <p>
+                    The configuration file <code>deviceregistration.properties</code> contains the following properties:
+                </p>
+                <ul>
+                    <li><code>context</code>: Application context (default: /lutece)</li>
+                </ul>
+                
+                <p>
+                    <strong>Spring Beans to Inject</strong>
+                </p>
+                <p>
+                    The following beans must be configured in the Spring context (<code>deviceregistration_context.xml</code> file):
+                </p>
+                <ul>
+                    <li><code>deviceregistration.deviceRegistrationDAO</code>: DAO for device registration management (class: fr.paris.lutece.plugins.deviceregistration.business.deviceregistration.DeviceRegistrationDAO)</li>
+                    <li><code>deviceregistration.deviceRegistrationHistoryDAO</code>: DAO for history management (class: fr.paris.lutece.plugins.deviceregistration.business.history.DeviceRegistrationHistoryDAO)</li>
+                    <li><code>deviceregistration.deviceRegistrationRest</code>: Main REST service (class: fr.paris.lutece.plugins.deviceregistration.rs.DeviceRegistrationRest)</li>
+                    <li><code>deviceregistration.swaggerRest</code>: Swagger service for API documentation (class: fr.paris.lutece.plugins.deviceregistration.rs.SwaggerRest)</li>
+                    <li><code>deviceregistration.uncaughtDeviceRegistrationExceptionMapper</code>: REST exception handler (class: fr.paris.lutece.plugins.deviceregistration.rs.error.UncaughtDeviceRegistrationExceptionMapper)</li>
+                </ul>
+                
+                <p>
+                    <strong>Daemon Classes</strong>
+                </p>
+                <p>
+                    This plugin does not contain any Daemon classes to activate.
+                </p>
+                
+                <p>
+                    <strong>Caches</strong>
+                </p>
+                <p>
+                    This plugin does not require any cache activation.
+                </p>
             </subsection>
+            
             <subsection name="Usage">
-                <p></p>
+                <p>
+                    <strong>Administration Rights</strong>
+                </p>
+                <p>
+                    The plugin defines the following administration right:
+                </p>
+                <ul>
+                    <li><code>DEVICEREGISTRATION_MANAGEMENT</code>: Device registration management (level 1) - Access via URL: jsp/admin/plugins/deviceregistration/ManageDeviceRegistrations.jsp</li>
+                </ul>
+                
+                <p>
+                    <strong>Exposed Java Services</strong>
+                </p>
+                <p>
+                    The plugin exposes the following Java services:
+                </p>
+                
+                <p>
+                    <em>DeviceRegistrationService</em> (singleton)
+                </p>
+                <ul>
+                    <li><code>getInstance()</code>: Get the unique service instance</li>
+                    <li><code>createDeviceRegistration(String customerId, String connectionId, String registrationToken, String tokenIssuer)</code>: Create a new device registration with data validation and automatic history entry creation</li>
+                    <li><code>deleteDeviceRegistration(String customerId, String connectionId, String registrationToken, String tokenIssuer)</code>: Delete one or more device registrations according to provided criteria with automatic historization</li>
+                    <li><code>getRegistrationTokensByCriteria(String customerId, String connectionId, String tokenIssuer)</code>: Retrieve the list of registration tokens according to customer_id and/or connection_id criteria</li>
+                </ul>
+                
+                <p>
+                    <em>DeviceRegistrationHistoryService</em> (singleton)
+                </p>
+                <ul>
+                    <li><code>getInstance()</code>: Get the unique service instance</li>
+                    <li><code>createDeviceRegistrationHistory(DeviceRegistration deviceRegistration, ChangeType changeType)</code>: Create a history entry to track creation and deletion operations</li>
+                </ul>
+                
+                <p>
+                    <strong>REST API</strong>
+                </p>
+                <p>
+                    The plugin exposes the following REST APIs (base path: <code>/rest/deviceregistration/v1</code>):
+                </p>
+                
+                <p>
+                    <em>GET /rest/deviceregistration/v1/token</em>
+                </p>
+                <ul>
+                    <li>Description: Get all registration tokens by identity (GUID/CUID)</li>
+                    <li>Query Parameters: <code>connectionId</code> (optional), <code>customerId</code> (optional)</li>
+                    <li>Required Headers: <code>CLIENT_CODE</code> (mandatory) - Client code/token issuer</li>
+                    <li>Response 200: Registration token(s) found (DeviceRegistrationResponse)</li>
+                    <li>Response 400: Processing error with explanation message</li>
+                    <li>Response 404: Registration token not found</li>
+                    <li>Content-Type: application/json</li>
+                </ul>
+                
+                <p>
+                    <em>POST /rest/deviceregistration/v1/token</em>
+                </p>
+                <ul>
+                    <li>Description: Create a new device registration</li>
+                    <li>Required Headers: <code>CLIENT_CODE</code> (mandatory) - Client code/token issuer</li>
+                    <li>Body: DeviceRegistrationRequest (JSON) with customerId, connectionId and registrationToken</li>
+                    <li>Response 200: Device registration created (DeviceRegistrationResponse)</li>
+                    <li>Response 400: Processing error with explanation message</li>
+                    <li>Response 409: Token already exists</li>
+                    <li>Content-Type: application/json</li>
+                </ul>
+                
+                <p>
+                    <em>DELETE /rest/deviceregistration/v1/token</em>
+                </p>
+                <ul>
+                    <li>Description: Delete a device registration</li>
+                    <li>Required Headers: <code>CLIENT_CODE</code> (mandatory) - Client code/token issuer</li>
+                    <li>Body: DeviceRegistrationRequest (JSON) with customerId, connectionId and registrationToken</li>
+                    <li>Response 204: Device registration deleted successfully</li>
+                    <li>Response 400: Processing error with explanation message</li>
+                    <li>Response 404: Nothing was deleted</li>
+                    <li>Content-Type: application/json</li>
+                </ul>
+                
+                <p>
+                    Swagger documentation available via the swaggerui plugin.
+                </p>
             </subsection>
         </section>
     </body>
 </document>
-
