@@ -79,10 +79,10 @@ public class DeviceRegistrationRest
     } )
     public Response getRegistrationToken( @ApiParam( allowEmptyValue = true ) @QueryParam( Constants.CONNECTION_ID ) String connectionId,
             @ApiParam( allowEmptyValue = true ) @QueryParam( Constants.CUSTOMER_ID ) String customerId,
-            @ApiParam( required = true ) @HeaderParam( Constants.CLIENT_CODE ) String clientCode ) throws DeviceRegistrationException
+            @ApiParam( required = true ) @HeaderParam( Constants.TOKEN_ISSUER ) String issuer ) throws DeviceRegistrationException
     {
         final List<String> registrationTokenList = DeviceRegistrationService.getInstance( ).getRegistrationTokensByCriteria( customerId, connectionId,
-                clientCode );
+                issuer );
 
         return Response.status( Response.Status.OK )
                 .entity( JsonUtil.buildJsonResponse( new JsonResponse( new DeviceRegistrationResponse( customerId, connectionId, registrationTokenList ) ) ) )
@@ -101,7 +101,7 @@ public class DeviceRegistrationRest
     } )
     public Response createDeviceRegistration(
             @ApiParam( value = "Data of the deviceRegistration to create", required = true, type = "DeviceRegistrationRequest" ) DeviceRegistrationRequest request,
-            @ApiParam( required = true ) @HeaderParam( Constants.CLIENT_CODE ) String clientCode ) throws DeviceRegistrationException
+            @ApiParam( required = true ) @HeaderParam( Constants.TOKEN_ISSUER ) String clientCode ) throws DeviceRegistrationException
     {
         final DeviceRegistration deviceRegistration = DeviceRegistrationService.getInstance().createDeviceRegistration(request.getCustomerId(), request.getConnectionId(), request.getRegistrationToken(), clientCode);
         final DeviceRegistrationResponse response = new DeviceRegistrationResponse( deviceRegistration.getCustomerId( ), deviceRegistration.getConnectionId( ), List.of( deviceRegistration.getRegistrationToken( ) ) );
@@ -120,7 +120,7 @@ public class DeviceRegistrationRest
     } )
     public Response deleteRegistrationToken(
             @ApiParam( value = "Data of the deviceRegistration to delete", required = true, type = "DeviceRegistrationRequest" ) DeviceRegistrationRequest request,
-            @ApiParam( name = Constants.CLIENT_CODE, required = true ) @HeaderParam( Constants.CLIENT_CODE ) String clientCode )
+            @ApiParam( name = Constants.TOKEN_ISSUER, required = true ) @HeaderParam( Constants.TOKEN_ISSUER ) String clientCode )
             throws DeviceRegistrationException
     {
         DeviceRegistrationService.getInstance( ).deleteDeviceRegistration( request.getCustomerId(), request.getConnectionId(), request.getRegistrationToken(), clientCode );

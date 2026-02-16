@@ -104,6 +104,15 @@ public class DeviceRegistrationService
                         ChangeType.DELETED ) );
     }
 
+    /**
+     * get Registration Tokens By Criteria
+     * 
+     * @param customerId
+     * @param connectionId
+     * @param tokenIssuer
+     * @return the token list
+     * @throws DeviceRegistrationException
+     */
     public List<String> getRegistrationTokensByCriteria( final String customerId, final String connectionId, final String tokenIssuer )
             throws DeviceRegistrationException
     {
@@ -114,20 +123,24 @@ public class DeviceRegistrationService
 
         if ( Objects.isNull( tokenIssuer ) )
         {
-            throw new DeviceRegistrationException( "Missing client code is request" );
+            throw new DeviceRegistrationException( "Missing issuer in request" );
         }
 
         final List<String> registrationTokens = DeviceRegistrationHome.findListByCriteria( this.prepareCriteria( customerId, connectionId, null, tokenIssuer ) ).stream( )
                 .map( DeviceRegistration::getRegistrationToken ).collect( Collectors.toList( ) );
 
-        if ( registrationTokens.isEmpty( ) )
-        {
-            throw new DeviceRegistrationException( Response.Status.NOT_FOUND, "No result found" );
-        }
-
         return registrationTokens;
     }
 
+    /**
+     * Prepare the map of criteria
+     * 
+     * @param customerId
+     * @param connectionId
+     * @param registrationToken
+     * @param tokenIssuer
+     * @return the map
+     */
     private Map<String, String> prepareCriteria( final String customerId, final String connectionId, String registrationToken, String tokenIssuer )
     {
         final Map<String, String> criteria = new HashMap<>( );
