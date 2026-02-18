@@ -30,7 +30,7 @@
           "type" : "string",
           "allowEmptyValue" : true
         }, {
-          "name" : "CLIENT_CODE",
+          "name" : "token_issuer",
           "in" : "header",
           "required" : true,
           "type" : "string"
@@ -66,7 +66,7 @@
             "$ref" : "#/definitions/DeviceRegistrationRequest"
           }
         }, {
-          "name" : "CLIENT_CODE",
+          "name" : "token_issuer",
           "in" : "header",
           "required" : true,
           "type" : "string"
@@ -102,7 +102,7 @@
             "$ref" : "#/definitions/DeviceRegistrationRequest"
           }
         }, {
-          "name" : "CLIENT_CODE",
+          "name" : "token_issuer",
           "in" : "header",
           "required" : true,
           "type" : "string"

@@ -84,9 +84,18 @@ public class DeviceRegistrationRest
         final List<String> registrationTokenList = DeviceRegistrationService.getInstance( ).getRegistrationTokensByCriteria( customerId, connectionId,
                 issuer );
 
-        return Response.status( Response.Status.OK )
-                .entity( JsonUtil.buildJsonResponse( new JsonResponse( new DeviceRegistrationResponse( customerId, connectionId, registrationTokenList ) ) ) )
-                .build( );
+        if ( registrationTokenList.isEmpty( ) )
+        {
+            return Response.status( Response.Status.NOT_FOUND )
+                    .entity( JsonUtil.buildJsonResponse( new JsonResponse( new DeviceRegistrationResponse( customerId, connectionId, registrationTokenList ) ) ) )
+                    .build( );
+        }
+        else
+        {
+            return Response.status( Response.Status.OK )
+                    .entity( JsonUtil.buildJsonResponse( new JsonResponse( new DeviceRegistrationResponse( customerId, connectionId, registrationTokenList ) ) ) )
+                    .build( );
+        }
     }
 
     @POST
