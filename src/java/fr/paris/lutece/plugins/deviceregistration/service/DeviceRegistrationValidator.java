@@ -54,7 +54,7 @@ public class DeviceRegistrationValidator
 
     public static void validate( final DeviceRegistration deviceRegistration ) throws DeviceRegistrationException
     {
-        if ( Objects.isNull( deviceRegistration.getCustomerId( ) ) || Objects.isNull( deviceRegistration.getConnectionId( ) ) )
+        if ( Objects.isNull( deviceRegistration.getCustomerId( ) ) && Objects.isNull( deviceRegistration.getConnectionId( ) ) )
         {
             throw new DeviceRegistrationException( Response.Status.BAD_REQUEST, "Client must provide a customer ID or a connection ID (or both)" );
         }
