@@ -145,18 +145,20 @@ public class DeviceRegistrationService
     {
         final Map<String, String> criteria = new HashMap<>( );
 
-        if ( connectionId != null )
-        {
-            criteria.put( "connection_id", connectionId );
-        }
         if ( customerId != null )
         {
             criteria.put( "customer_id", customerId );
+        } 
+        else if ( connectionId != null )
+        {
+            criteria.put( "connection_id", connectionId );
         }
+        
         if ( registrationToken != null )
         {
             criteria.put( "registration_token", registrationToken );
         }
+        
         if ( tokenIssuer != null )
         {
             criteria.put( "token_issuer", tokenIssuer );
